@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-// import logo from './logo.svg';
 import './App.css';
+import firebase from './firebase.js';
 
 class App extends Component {
   state = {
@@ -14,29 +14,37 @@ class App extends Component {
     e.persist();
     this.setState(() => ({ [e.target.name]: e.target.value }));
     // this.setState({ [e.target.name]: e.target.value });
+    // console.log(this.state);
+  }
+  handleSubmit = (e) => {
+    e.preventDefault();
+    const itemsRef = firebase.database().ref('items');
+    const item = {
+      title: this.state.currentItem,
+      user: this.state.username
+    }
+    itemsRef.push(item);
+    this.setState(() => ({
+      currentItem: '',
+      username: ''
+    }));
   }
   render() {
     return (
       <div className='app'>
         <header>
-          <div className='wrapper'>
-            <h1>Fun Food Friends</h1>
-          </div>
+          <h1>Fun Food Friends</h1>
         </header>
         <div className='container'>
           <section className='add-item'>
-            <form>
+            <form onSubmit={this.handleSubmit}>
               <input type="text" name="username" placeholder="What's your name?" onChange={this.handleChange} value={this.state.username} />
               <input type="text" name="currentItem" placeholder="What are you bringing?" onChange={this.handleChange} value={this.state.currentItem} />
               <button>Add Item</button>
             </form>
           </section>
           <section className='display-item'>
-            <div className='wrapper'>
-              <ul>
-
-              </ul>
-            </div>
+            <ul></ul>
           </section>
         </div>
       </div>
