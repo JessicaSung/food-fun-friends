@@ -55,7 +55,7 @@ class App extends Component {
     return (
       <div className='app'>
         <header>
-          <h1>Fun Food Friends</h1>
+          <h1>Food Fun Friends</h1>
         </header>
         <div className="container">
           <section className='add-item side'>
