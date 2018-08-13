@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Container, Row, Col } from 'reactstrap';
 import './App.css';
 import firebase from './firebase.js';
 
@@ -30,6 +29,10 @@ class App extends Component {
       currentItem: '',
       username: ''
     }));
+  }
+  removeItem = (itemId) => {
+    const itemRef = firebase.database().ref(`/items/${itemId}`);
+    itemRef.remove();
   }
   componentDidMount() {
     const itemsRef = firebase.database().ref('items');
@@ -64,14 +67,15 @@ class App extends Component {
           </section>
           <section className='display-item side'>
             <ul>
-              {this.state.items.map((item) => {
-                return (
-                  <li key={item.id}>
-                    <h3>{item.title}</h3>
-                    <p>brought by: {item.user}</p>
-                  </li>
-                )
-              })}
+              {this.state.items.map((item) =>
+                <li key={item.id}>
+                  <h3>{item.title}</h3>
+                  <p>brought by: {item.user}</p>
+                  <button onClick={() => this.removeItem(item.id)}>Remove Item</button>
+                  {/* This triggers error message: Cannot update during an existing state transition (such as within `render` or another component's constructor). */}
+                  {/* <button onClick={this.removeItem(item.id)}>Remove Item</button> */}
+                </li>
+              )}
             </ul>
           </section>
         </div>
