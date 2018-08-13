@@ -19,4 +19,7 @@ Continue adding or removing items.
 * [Firebase](https://firebase.google.com/)
 
 ## Setup
-* Add a firebase.js file in src folder with your firebase configuration.
+1. In package.json, change homepage to your project URL.
+1. In the command line, run `yarn` to install dependencies.
+1. Rename sample.firebase.js to firebase.js and add values from your firebase database.
+1. When you are ready to deploy, run `yarn run predeploy` and then, `yarn run deploy`.

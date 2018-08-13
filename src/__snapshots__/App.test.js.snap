@@ -1,0 +1,90 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`react-test-renderer html match 1`] = `
+<div
+  className="app"
+>
+  <header>
+    <h1>
+      Food Fun Friends
+    </h1>
+  </header>
+  <div
+    className="container"
+  >
+    <section
+      className="add-item side"
+    >
+      <form
+        onSubmit={[Function]}
+      >
+        <input
+          name="username"
+          onChange={[Function]}
+          placeholder="Your name"
+          type="text"
+          value=""
+        />
+        <input
+          name="currentItem"
+          onChange={[Function]}
+          placeholder="What are you bringing?"
+          type="text"
+          value=""
+        />
+        <button>
+          Add Item
+        </button>
+      </form>
+    </section>
+    <section
+      className="display-item side"
+    >
+      <ul>
+        <li>
+          <h3>
+            Zongzi
+          </h3>
+          <p>
+            brought by: 
+            Aileen
+          </p>
+          <button
+            onClick={[Function]}
+          >
+            Remove Item
+          </button>
+        </li>
+        <li>
+          <h3>
+            Pad Thai
+          </h3>
+          <p>
+            brought by: 
+            Brian
+          </p>
+          <button
+            onClick={[Function]}
+          >
+            Remove Item
+          </button>
+        </li>
+        <li>
+          <h3>
+            Curry Chicken
+          </h3>
+          <p>
+            brought by: 
+            Jessica
+          </p>
+          <button
+            onClick={[Function]}
+          >
+            Remove Item
+          </button>
+        </li>
+      </ul>
+    </section>
+  </div>
+</div>
+`;
