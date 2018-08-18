@@ -31,6 +31,22 @@ class App extends Component {
       username: ''
     }));
   }
+  logout = () => {
+    auth.signOut()
+      .then(() => {
+        this.setState(() => ({ user: null }));
+      });
+  }
+  login = async () => {
+    const result = await auth.signInWithPopup(provider);
+    const user = result.user;
+    this.setState(() => ({ user }));
+    // auth.signInWithPopup(provider)
+    //   .then((result) => {
+    //     const user = result.user;
+    //     this.setState(() => ({ user }));
+    //   });
+  }
   removeItem = (itemId) => {
     const itemRef = firebase.database().ref(`/items/${itemId}`);
     itemRef.remove();
@@ -57,6 +73,11 @@ class App extends Component {
       <div className='app'>
         <header>
           <h1>Food Fun Friends</h1>
+          {this.state.user ?
+            <button onClick={this.logout}>Log Out</button>
+            :
+            <button onClick={this.login}>Log In</button>
+          }
         </header>
         <div className="container">
           <section className='add-item side'>
@@ -80,7 +101,7 @@ class App extends Component {
             </ul>
           </section>
         </div>
-      </div>
+      </div >
     );
   }
 }
