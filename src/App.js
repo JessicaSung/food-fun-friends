@@ -98,16 +98,17 @@ class App extends Component {
         {this.state.user ?
           <div>
             <div className="user-profile">
-              <img src={this.state.user.photoURL} />
+              <img src={this.state.user.photoURL} alt="" />
             </div>
             <div className="container">
+              {/* Form for user to add item */}
               <section className="add-item">
-                {/* User and item form */}
                 <form onSubmit={this.handleSubmit}>
                   <input
                     type="text"
                     name="username"
                     placeholder="Your name"
+                    readOnly
                     value={this.state.user.displayName || this.state.user.email}
                   />
                   <input
@@ -119,6 +120,27 @@ class App extends Component {
                   />
                   <button>Add Item</button>
                 </form>
+              </section>
+              {/* Items added will be displayed here */}
+              <section className="display-item">
+                <div className="wrapper">
+                  <ul>
+                    {this.state.items.map((item) => {
+                      return (
+                        <li key={item.id}>
+                          <h3>{item.title}</h3>
+                          <p>brought by: {item.user}
+                            {item.user === this.state.user.displayName || item.user === this.state.user.email
+                              ?
+                              <button onClick={() => this.removeItem(item.id)}>Remove Item</button>
+                              :
+                              null}
+                          </p>
+                        </li>
+                      )
+                    })}
+                  </ul>
+                </div>
               </section>
             </div>
           </div>
