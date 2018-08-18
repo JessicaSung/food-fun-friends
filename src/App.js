@@ -25,7 +25,7 @@ class App extends Component {
     const itemsRef = firebase.database().ref('items');
     const item = {
       title: this.state.currentItem,
-      user: this.state.username
+      user: this.state.displayName || this.state.user.email // no longer uses user input 'username' but displayName or email from Google authentication
     }
     itemsRef.push(item);
     this.setState(() => ({
@@ -99,6 +99,27 @@ class App extends Component {
           <div>
             <div className="user-profile">
               <img src={this.state.user.photoURL} />
+            </div>
+            <div className="container">
+              <section className="add-item">
+                {/* User and item form */}
+                <form onSubmit={this.handleSubmit}>
+                  <input
+                    type="text"
+                    name="username"
+                    placeholder="Your name"
+                    value={this.state.user.displayName || this.state.user.email}
+                  />
+                  <input
+                    type="text"
+                    name="currentItem"
+                    placeholder="Your item"
+                    onChange={this.handleChange}
+                    value={this.state.currentItem}
+                  />
+                  <button>Add Item</button>
+                </form>
+              </section>
             </div>
           </div>
           :
