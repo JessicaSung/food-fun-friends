@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import './App.css';
-import firebase from './firebase.js';
+import firebase, { auth, provider } from './firebase.js';
 
 class App extends Component {
   state = {
     currentItem: '',
     username: '',
-    items: []
+    items: [],
+    user: null
   }
   handleChange = (e) => {
     // console.log(e, e.target.name, e.target.value);
