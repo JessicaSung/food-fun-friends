@@ -9,15 +9,17 @@ class App extends Component {
     items: [],
     user: null
   }
+  // User form input saved in state
   handleChange = (e) => {
-    // console.log(e, e.target.name, e.target.value);
+    /* console.log(e, e.target.name, e.target.value);
 
-    // The e.persist(); is necessary with an updater function for setState because otherwise SyntheticEvent is pooled.
+    The e.persist(); is necessary with an updater function for setState because otherwise SyntheticEvent is pooled. */
     e.persist();
     this.setState(() => ({ [e.target.name]: e.target.value }));
-    // this.setState({ [e.target.name]: e.target.value });
-    // console.log(this.state);
+    /* this.setState({ [e.target.name]: e.target.value });
+    console.log(this.state); */
   }
+  // User form input saved to firebase
   handleSubmit = (e) => {
     e.preventDefault();
     const itemsRef = firebase.database().ref('items');
@@ -31,27 +33,33 @@ class App extends Component {
       username: ''
     }));
   }
+  // Logs user out of app
   logout = () => {
     auth.signOut()
       .then(() => {
         this.setState(() => ({ user: null }));
       });
   }
+  // Logs user into app
   login = async () => {
     const result = await auth.signInWithPopup(provider);
     const user = result.user;
     this.setState(() => ({ user }));
-    // auth.signInWithPopup(provider)
-    //   .then((result) => {
-    //     const user = result.user;
-    //     this.setState(() => ({ user }));
-    //   });
+    /*
+    auth.signInWithPopup(provider)
+      .then((result) => {
+        const user = result.user;
+        this.setState(() => ({ user }));
+      });
+    */
   }
+  // Removes item from firebase
   removeItem = (itemId) => {
     const itemRef = firebase.database().ref(`/items/${itemId}`);
     itemRef.remove();
   }
   componentDidMount() {
+    // Displays items from firebase on the page
     const itemsRef = firebase.database().ref('items');
     itemsRef.on('value', (snapshot) => {
       let items = snapshot.val();
@@ -67,6 +75,12 @@ class App extends Component {
         items: newState
       }));
     });
+    // Persists login across refresh
+    auth.onAuthStateChanged((user) => {
+      if (user) {
+        this.setState(() => ({ user }));
+      }
+    });
   }
   render() {
     return (
@@ -74,9 +88,9 @@ class App extends Component {
         <header>
           <h1>Food Fun Friends</h1>
           {this.state.user ?
-            <button onClick={this.logout}>Log Out</button>
+            <button onClick={this.logout} className="authentication-button">Log Out</button>
             :
-            <button onClick={this.login}>Log In</button>
+            <button onClick={this.login} className="authentication-button">Log In</button>
           }
         </header>
         <div className="container">
