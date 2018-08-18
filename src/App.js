@@ -87,34 +87,25 @@ class App extends Component {
       <div className='app'>
         <header>
           <h1>Food Fun Friends</h1>
+          {/* Update UI to reflect user's login */}
           {this.state.user ?
             <button onClick={this.logout} className="authentication-button">Log Out</button>
             :
             <button onClick={this.login} className="authentication-button">Log In</button>
           }
         </header>
-        <div className="container">
-          <section className='add-item side'>
-            <form onSubmit={this.handleSubmit}>
-              <input type="text" name="username" placeholder="Your name" onChange={this.handleChange} value={this.state.username} />
-              <input type="text" name="currentItem" placeholder="What are you bringing?" onChange={this.handleChange} value={this.state.currentItem} />
-              <button>Add Item</button>
-            </form>
-          </section>
-          <section className='display-item side'>
-            <ul>
-              {this.state.items.map((item) =>
-                <li key={item.id}>
-                  <h3>{item.title}</h3>
-                  <p>brought by: {item.user}</p>
-                  <button onClick={() => this.removeItem(item.id)}>Remove Item</button>
-                  {/* This triggers error message: Cannot update during an existing state transition (such as within `render` or another component's constructor). */}
-                  {/* <button onClick={this.removeItem(item.id)}>Remove Item</button> */}
-                </li>
-              )}
-            </ul>
-          </section>
-        </div>
+        {/* Show user photo if logged in, otherwise, prompt user to log in */}
+        {this.state.user ?
+          <div>
+            <div className="user-profile">
+              <img src={this.state.user.photoURL} />
+            </div>
+          </div>
+          :
+          <div className="wrapper">
+            <p>You must be logged in to see the potluck list and add an item.</p>
+          </div>
+        }
       </div >
     );
   }
