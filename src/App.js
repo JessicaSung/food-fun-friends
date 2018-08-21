@@ -25,7 +25,7 @@ class App extends Component {
     const itemsRef = firebase.database().ref('items');
     const item = {
       title: this.state.currentItem,
-      user: this.state.displayName || this.state.user.email // no longer uses user input 'username' but displayName or email from Google authentication
+      user: this.state.user.displayName || this.state.user.email // no longer uses user input 'username' but displayName or email from Google authentication
     }
     itemsRef.push(item);
     this.setState(() => ({
@@ -34,17 +34,22 @@ class App extends Component {
     }));
   }
   // Logs user out of app
-  logout = () => {
+  logout = async () => {
+    await auth.signOut();
+    this.setState(() => ({ user: null }));
+    /*
     auth.signOut()
       .then(() => {
         this.setState(() => ({ user: null }));
       });
+    */
   }
   // Logs user into app
   login = async () => {
     const result = await auth.signInWithPopup(provider);
-    const user = result.user;
-    this.setState(() => ({ user }));
+    const username = result.user.displayName;
+
+    this.setState(() => ({ username }));
     /*
     auth.signInWithPopup(provider)
       .then((result) => {
@@ -130,6 +135,8 @@ class App extends Component {
                         <li key={item.id}>
                           <h3>{item.title}</h3>
                           <p>brought by: {item.user}
+                            {console.log(item, item.user)}
+
                             {item.user === this.state.user.displayName || item.user === this.state.user.email
                               ?
                               <button onClick={() => this.removeItem(item.id)}>Remove Item</button>
