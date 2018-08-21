@@ -5,9 +5,26 @@ import firebase, { auth, provider } from './firebase.js';
 class App extends Component {
   state = {
     currentItem: '',
-    username: '',
     items: [],
     user: null
+  }
+  // Displays items from firebase on the page
+  getItem = () => {
+    const itemsRef = firebase.database().ref('items');
+    itemsRef.on('value', (snapshot) => {
+      let items = snapshot.val();
+      let newState = [];
+      for (let item in items) {
+        newState.push({
+          id: item,
+          title: items[item].title,
+          user: items[item].user
+        });
+      }
+      this.setState(() => ({
+        items: newState
+      }));
+    });
   }
   // User form input saved in state
   handleChange = (e) => {
@@ -29,9 +46,23 @@ class App extends Component {
     }
     itemsRef.push(item);
     this.setState(() => ({
-      currentItem: '',
-      username: ''
+      currentItem: ''
     }));
+    this.getItem();
+  }
+  // Logs user into app
+  login = async () => {
+    const result = await auth.signInWithPopup(provider);
+    const user = result.user;
+
+    this.setState(() => ({ user }));
+    /*
+    auth.signInWithPopup(provider)
+      .then((result) => {
+        const user = result.user;
+        this.setState(() => ({ user }));
+      });
+    */
   }
   // Logs user out of app
   logout = async () => {
@@ -44,42 +75,13 @@ class App extends Component {
       });
     */
   }
-  // Logs user into app
-  login = async () => {
-    const result = await auth.signInWithPopup(provider);
-    const username = result.user.displayName;
-
-    this.setState(() => ({ username }));
-    /*
-    auth.signInWithPopup(provider)
-      .then((result) => {
-        const user = result.user;
-        this.setState(() => ({ user }));
-      });
-    */
-  }
   // Removes item from firebase
   removeItem = (itemId) => {
     const itemRef = firebase.database().ref(`/items/${itemId}`);
     itemRef.remove();
   }
   componentDidMount() {
-    // Displays items from firebase on the page
-    const itemsRef = firebase.database().ref('items');
-    itemsRef.on('value', (snapshot) => {
-      let items = snapshot.val();
-      let newState = [];
-      for (let item in items) {
-        newState.push({
-          id: item,
-          title: items[item].title,
-          user: items[item].user
-        });
-      }
-      this.setState(() => ({
-        items: newState
-      }));
-    });
+    this.getItem();
     // Persists login across refresh
     auth.onAuthStateChanged((user) => {
       if (user) {
@@ -135,7 +137,6 @@ class App extends Component {
                         <li key={item.id}>
                           <h3>{item.title}</h3>
                           <p>brought by: {item.user}
-                            {console.log(item, item.user)}
 
                             {item.user === this.state.user.displayName || item.user === this.state.user.email
                               ?
